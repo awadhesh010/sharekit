@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../js/session.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/files.js"></script>
+<style>
+  #drawer {
+    transition: 300ms
+  }
+</style>
+</head>
+<body>
+    <div class="bg-gray-100 fixed top-0 left-0 w-[300px] h-full p-8 space-y-12">
+      <div class="flex gap-1">
+        <img src="/images/logo.png" alt="logo" class="w-10" />
+        <div class="flex">
+            <h1 class="text-3xl font-semibold">Share</h1>
+            <h1 class="text-3xl text-blue-600 font-semibold">Kit</h1>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-y-4">
+        <div class="text-center mb-4">
+            <button class="relative">
+                <img src="../images/avt.png" id="picture" class="rounded-full w-[100px] h-[100px] object-cover" />
+                <input type="file" accept="image/*" class="absolute top-0 left-0 w-full h-full opacity-0 rounded-full" onchange="uploadProfilePic(event)" />
+            </button>
+            <div>
+                <h1 class="text-lg font-semibold capitalize" id="fullname"></h1>
+                <label class="text-gray-600" id="email"></label>
+            </div>
+        </div>
+
+        <a href="/apps/dashboard.html" class="bg-zinc-200 px-3 py-2 rounded">
+          <i class="ri-dashboard-fill text-lg"></i>
+          Dashboard
+        </a>
+
+        <a href="/apps/files.html" class="bg-zinc-200 px-3 py-2 rounded">
+          <i class="ri-file-3-fill text-lg"></i>
+          Files
+        </a>
+
+        <a href="#" class="bg-zinc-200 px-3 py-2 rounded" onclick="logout()">
+            <i class="ri-logout-circle-r-fill text-lg"></i>
+            Logout
+        </a>
+      </div>
+
+      <div>
+        <div class="bg-blue-100 h-2 mb-2">
+          <div class="w-[50%] bg-blue-600 h-full"></div>
+        </div>
+        <label class="text-sm">200.05 Mb of 1024 Mb</label>
+      </div>
+
+      <a class="bg-slate-900 w-full p-3 text-white rounded block text-center">
+        <i class="ri-money-rupee-circle-fill text-lg"></i>
+        Upgrade Now
+      </a>
+      
+    </div>
+
+    <div class="ml-[300px] p-8" style="width: calc(100% - 300px)">
+        <h1 class="text-2xl font-semibold">Files</h1>
+        <div class="mt-8 p-16 rounded-lg text-white text-center bg-gradient-to-r from-cyan-500 to-blue-500 relative">
+            <i class="ri-upload-2-line text-4xl"></i>
+            <p class="text-lg">Choose a file to upload now</p>
+            <input type="file" class="opacity-0 absolute top-0 left-0 w-full h-full" onchange="uploadFile(event)"/>
+        </div>
+
+        <div>
+          <div class="bg-blue-100 text-white mt-8">
+              <div class="bg-blue-600 h-full text-center" id="progress">
+                  
+              </div>
+          </div>
+          <div id="size"></div>
+        </div>
+
+        <div class="mt-8">
+            <table class="w-full" id="files-table">
+                <tr class="bg-gray-200 text-left">
+                    <th class="py-4 pl-3">S/No</th>
+                    <th>Filename</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </table>
+            <div class="flex gap-2 justify-end mt-8">
+                <button class="bg-slate-900 rounded px-4 py-2 text-white">1</button>
+                <button class="bg-slate-900 rounded px-4 py-2 text-white">2</button>
+                <button class="bg-slate-900 rounded px-4 py-2 text-white">3</button>
+                <button class="bg-slate-900 rounded px-4 py-2 text-white">4</button>
+                <button class="bg-slate-900 rounded px-4 py-2 text-white">5</button>
+            </div>
+        </div>
+
+        <aside id="drawer" class="bg-white w-[450px] fixed top-0 -right-[450px] h-full shadow-lg">
+          <div class="px-6 py-4 border-b flex items-center justify-between">
+            <h1 class="text-lg font-medium" id="filename"></h1>
+            <i class="ri-close-circle-fill" onclick="closeDrawer()"></i>
+          </div>
+          <form class="p-6 space-y-8" onsubmit="shareFile(event)">
+            <div class="flex flex-col hidden">
+              <label class="text-lg font-medium mb-2">Sender</label>
+              <input name="sender" readonly disabled class="border rounded p-3" required id="sender" />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="text-lg font-medium mb-2">Fullname</label>
+              <input name="user" class="border rounded p-3" placeholder="Enter the name of user" required />
+            </div>
+
+            <div class="flex flex-col">
+              <label class="text-lg font-medium mb-2">Email</label>
+              <input type="email" name="email" class="border rounded p-3" placeholder="mail@example.com" required />
+            </div>
+
+            <div class="flex flex-col hidden">
+              <label class="text-lg font-medium mb-2">File</label>
+              <input name="file" class="border rounded p-3" required readonly disabled id="file-input" />
+            </div>
+
+            <button class="bg-indigo-600 text-white px-6 py-3 rounded hidden" id="loading-button" disabled>
+              Sending...
+            </button>
+
+            <button class="bg-rose-600 text-white px-6 py-3 rounded" id="sending-button">
+              <i class="ri-send-plane-line"></i>
+              SEND
+            </button>
+          </form>
+
+        </aside>
+    </div>
+</body>
+</html>

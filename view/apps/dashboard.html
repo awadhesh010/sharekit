@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+<script src="../js/session.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/dashboard.js"></script>
+</head>
+<body>
+    <div class="bg-gray-100 fixed top-0 left-0 w-[300px] h-full p-8 space-y-12">
+      <div class="flex gap-1">
+        <img src="/images/logo.png" alt="logo" class="w-10" />
+        <div class="flex">
+            <h1 class="text-3xl font-semibold">Share</h1>
+            <h1 class="text-3xl text-blue-600 font-semibold">Kit</h1>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-y-4">
+        <div class="text-center mb-4">
+          <button class="relative">
+            <img src="../images/avt.png" width="100" id="picture" />
+            <input type="file" accept="image/*" class="absolute top-0 left-0 w-full h-full opacity-0 rounded-full" onchange="uploadProfilePic(event)" />
+          </button>
+          <div>
+            <h1 class="text-lg font-semibold capitalize" id="fullname"></h1>
+            <label class="text-gray-600" id="email"></label>
+          </div>
+        </div>
+        <a href="/apps/dashboard.html" class="bg-zinc-200 px-3 py-2 rounded">
+          <i class="ri-dashboard-fill text-lg"></i>
+          Dashboard
+        </a>
+
+        <a href="/apps/files.html" class="bg-zinc-200 px-3 py-2 rounded">
+          <i class="ri-file-3-fill text-lg"></i>
+          Files
+        </a>
+
+        <a href="#" class="bg-zinc-200 px-3 py-2 rounded" onclick="logout()">
+          <i class="ri-logout-circle-r-fill text-lg"></i>
+          Logout
+        </a>
+      </div>
+
+      <div>
+        <div class="bg-blue-100 h-2 mb-2">
+          <div class="w-[50%] bg-blue-600 h-full"></div>
+        </div>
+        <label class="text-sm">200.05 Mb of 1024 Mb</label>
+      </div>
+
+      <a class="bg-slate-900 w-full p-3 text-white rounded block text-center">
+        <i class="ri-money-rupee-circle-fill text-lg"></i>
+        Upgrade Now
+      </a>
+      
+    </div>
+
+    <div class="ml-[300px] p-8">
+        <h1 class="text-2xl font-semibold">Dashboard</h1>
+        <div class="grid grid-cols-4 mt-8 gap-12 mb-8" id="report">
+          
+        </div>
+        <div class="flex items-center justify-center flex-col py-8 col-span-2">
+            <div id="chart"></div>
+        </div>
+    </div>
+
+    <script>
+        var options = {
+    series: [44, 55, 13, 43, 22],
+    chart: {
+    width: 380,
+    type: 'pie',
+  },
+  labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+  responsive: [{
+    breakpoint: 480,
+    options: {
+      chart: {
+        width: 200
+      },
+      legend: {
+        position: 'bottom'
+      }
+    }
+  }]
+  };
+
+  var chart = new ApexCharts(document.querySelector("#chart"), options);
+  chart.render();
+    </script>
+</body>
+</html>
